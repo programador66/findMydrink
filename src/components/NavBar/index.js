@@ -28,36 +28,40 @@ export function NavBar() {
     getCategories();
   }, [getCategories]);
 
-  const handleSearchByName = useCallback(async () => {
-    if (search.length === 0) {
-      Swal.fire({
-        title: "Alerta!",
-        text: "Digite um nome para a busca!",
-        icon: "error",
-        confirmButtonText: "Fechar",
-        confirmButtonColor: "#CB1240",
-      });
-
-      return 0;
-    }
-    changeLoading(true);
-    await SearchServices.getDrinkByName(search)
-      .then(async (response) => {
-        await handleSetSearchDrink(search);
-        await handleSetDrinks(response.data.drinks);
-        changeLoading(false);
-      })
-      .catch((e) => {
-        changeLoading(false);
+  const handleSearchByName = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (search.length === 0) {
         Swal.fire({
           title: "Alerta!",
-          text: e.response.message || "Erro ao processar a busca!",
+          text: "Digite um nome para a busca!",
           icon: "error",
           confirmButtonText: "Fechar",
           confirmButtonColor: "#CB1240",
         });
-      });
-  }, [search, changeLoading, handleSetDrinks, handleSetSearchDrink]);
+
+        return 0;
+      }
+      changeLoading(true);
+      await SearchServices.getDrinkByName(search)
+        .then(async (response) => {
+          await handleSetSearchDrink(search);
+          await handleSetDrinks(response.data.drinks);
+          changeLoading(false);
+        })
+        .catch((e) => {
+          changeLoading(false);
+          Swal.fire({
+            title: "Alerta!",
+            text: e.response.message || "Erro ao processar a busca!",
+            icon: "error",
+            confirmButtonText: "Fechar",
+            confirmButtonColor: "#CB1240",
+          });
+        });
+    },
+    [search, changeLoading, handleSetDrinks, handleSetSearchDrink]
+  );
 
   const handleGetCategory = useCallback(
     async (category) => {
@@ -101,7 +105,11 @@ export function NavBar() {
             ))}
           </NavDropdown>
         </Nav>
-        <Form className="d-flex" style={{ marginLeft: "2rem" }}>
+        <Form
+          className="d-flex"
+          style={{ marginLeft: "2rem" }}
+          onSubmit={(e) => handleSearchByName(e)}
+        >
           <FormControl
             type="search"
             placeholder="Search by drink name"
@@ -110,7 +118,6 @@ export function NavBar() {
             style={{ width: "400px" }}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            onSubmit={handleSearchByName}
           />
           <Button
             variant="warning"

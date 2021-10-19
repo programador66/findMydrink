@@ -18,9 +18,7 @@ const DrinksDetail = () => {
       .catch((e) => {
         Swal.fire({
           title: "Alerta!",
-          text:
-            e.response.message ||
-            "Não foi possivel buscar os detalhes desse item!",
+          text: e.response || "Não foi possivel buscar os detalhes desse item!",
           icon: "error",
           confirmButtonText: "Fechar",
           confirmButtonColor: "#CB1240",
@@ -31,7 +29,7 @@ const DrinksDetail = () => {
 
   useEffect(() => {
     getDrinkDetail();
-  }, []);
+  }, [getDrinkDetail]);
 
   return (
     <Container>
