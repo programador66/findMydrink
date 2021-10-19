@@ -6,7 +6,8 @@ import { useDrink } from "../../hooks/DrinkContext";
 import SearchServices from "../../services/SearchServices";
 
 const Home = () => {
-  const { drinks, handleSetDrinks, loading, changeLoading } = useDrink();
+  const { drinks, handleSetDrinks, loading, changeLoading, searchDrink } =
+    useDrink();
 
   const searchDrinkByLetter = useCallback(async () => {
     changeLoading(true);
@@ -16,7 +17,6 @@ const Home = () => {
         changeLoading(false);
       })
       .catch((e) => {
-        console.log(e);
         changeLoading(false);
       });
   }, [handleSetDrinks, changeLoading]);
@@ -29,6 +29,15 @@ const Home = () => {
     <Container style={{ padding: "8px" }}>
       {loading && <Loading />}
       <Row>
+        <Col className="mt-2">
+          {searchDrink !== "" ? (
+            <h3>Resultado para: Margarita</h3>
+          ) : (
+            <h3>Recomendações</h3>
+          )}
+        </Col>
+      </Row>
+      <Row>
         {drinks?.map((drink, index) => (
           <Col className="mt-4" key={index}>
             <Card style={{ width: "20rem" }}>
@@ -36,7 +45,7 @@ const Home = () => {
               <Card.Body>
                 <Card.Title>{drink.strGlass}</Card.Title>
                 <Card.Text>
-                  {drink.strInstructions.substring(0, 50)} ...
+                  {drink.strInstructions.substring(0, 30)} ...
                 </Card.Text>
                 <Button variant="warning" style={{ color: "#FFF" }}>
                   Go More

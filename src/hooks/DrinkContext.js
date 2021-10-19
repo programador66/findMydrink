@@ -7,6 +7,7 @@ const DrinkContext = createContext({});
 const DrinkProvider = ({ children }) => {
   const [drinks, setDrinks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchDrink, setSearchDrink] = useState("");
 
   const handleSetDrinks = useCallback((data) => {
     setDrinks(data);
@@ -16,9 +17,20 @@ const DrinkProvider = ({ children }) => {
     setLoading(data);
   }, []);
 
+  const handleSetSearchDrink = useCallback((data) => {
+    setSearchDrink(data);
+  }, []);
+
   return (
     <DrinkContext.Provider
-      value={{ drinks, handleSetDrinks, changeLoading, loading }}
+      value={{
+        drinks,
+        handleSetDrinks,
+        changeLoading,
+        loading,
+        searchDrink,
+        handleSetSearchDrink,
+      }}
     >
       {children}
     </DrinkContext.Provider>

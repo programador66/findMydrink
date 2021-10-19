@@ -7,10 +7,14 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { useDrink } from "../../hooks/DrinkContext";
 import SearchServices from "../../services/SearchServices";
 
 export function NavBar() {
+  const { handleSetDrinks, changeLoading, handleSetSearchDrink } = useDrink();
   const [categories, setCategories] = useState([]);
+  const [search, setSearch] = useState("");
 
   const getCategories = useCallback(async () => {
     await SearchServices.getCategories()
@@ -23,6 +27,37 @@ export function NavBar() {
   useEffect(() => {
     getCategories();
   }, [getCategories]);
+
+  const handleSearchByName = useCallback(async () => {
+    if (search.length === 0) {
+      Swal.fire({
+        title: "Alerta!",
+        text: "Digite um nome para a busca!",
+        icon: "error",
+        confirmButtonText: "Fechar",
+        confirmButtonColor: "#CB1240",
+      });
+
+      return 0;
+    }
+    changeLoading(true);
+    await SearchServices.getDrinkByName(search)
+      .then(async (response) => {
+        await handleSetSearchDrink(search);
+        await handleSetDrinks(response.data.drinks);
+        changeLoading(false);
+      })
+      .catch((e) => {
+        changeLoading(false);
+        Swal.fire({
+          title: "Alerta!",
+          text: e.response.message || "Erro ao processar a busca!",
+          icon: "error",
+          confirmButtonText: "Fechar",
+          confirmButtonColor: "#CB1240",
+        });
+      });
+  }, [search, changeLoading, handleSetDrinks, handleSetSearchDrink]);
 
   return (
     <Navbar bg="light" expand="lg" color="orange">
@@ -55,10 +90,14 @@ export function NavBar() {
             className="mr-2"
             aria-label="Search"
             style={{ width: "400px" }}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onSubmit={handleSearchByName}
           />
           <Button
             variant="warning"
             style={{ marginLeft: "4px", color: "#FFF" }}
+            onClick={handleSearchByName}
           >
             Search
           </Button>
