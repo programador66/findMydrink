@@ -1,4 +1,4 @@
-<h1 align="center"><img align="center" src="./github_assets/tela_inicial.png" alt="Find My Drink" width="700"></img></h1>
+<h1 align="center"><img align="center" src="./github_asset/tela_inicial.png" alt="Find My Drink" width="700"></img></h1>
 
 # FindMyDrink
 
