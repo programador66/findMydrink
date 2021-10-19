@@ -59,23 +59,41 @@ export function NavBar() {
       });
   }, [search, changeLoading, handleSetDrinks, handleSetSearchDrink]);
 
+  const handleGetCategory = useCallback(
+    async (category) => {
+      changeLoading(true);
+      await SearchServices.filterCategoryByName(category)
+        .then(async (response) => {
+          await handleSetSearchDrink(category);
+          await handleSetDrinks(response.data.drinks);
+          changeLoading(false);
+        })
+        .catch((e) => {
+          changeLoading(false);
+        });
+    },
+    [handleSetSearchDrink, handleSetDrinks, changeLoading]
+  );
+
   return (
     <Navbar bg="light" expand="lg" color="orange">
-      <Navbar.Brand href="#" style={{ marginLeft: "8px" }}>
+      <Navbar.Brand href="/" style={{ marginLeft: "8px" }}>
         FINDMYDRINK
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="navbarScroll" />
       <Navbar.Collapse id="navbarScroll">
         <Nav
           className="mr-auto my-2 my-lg-0"
-          style={{ maxHeight: "100px" }}
+          style={{ maxHeight: "100px", marginLeft: "1rem" }}
           navbarScroll
         >
-          <Nav.Link href="#action2">Drinks</Nav.Link>
           <NavDropdown title="Category" id="navbarScrollingDropdown">
             {categories.map((category, index) => (
               <span key={index}>
-                <NavDropdown.Item href="#action3">
+                <NavDropdown.Item
+                  href="#findByCategory"
+                  onClick={() => handleGetCategory(category.strCategory)}
+                >
                   {category.strCategory}
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
@@ -83,7 +101,7 @@ export function NavBar() {
             ))}
           </NavDropdown>
         </Nav>
-        <Form className="d-flex">
+        <Form className="d-flex" style={{ marginLeft: "2rem" }}>
           <FormControl
             type="search"
             placeholder="Search by drink name"

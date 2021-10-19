@@ -30,6 +30,26 @@ class SearchServices extends Api {
     const response = await this.api.get(`list.php?c=list`);
     return response;
   }
+
+  /**
+   * @author Caio César Lacerda
+   * @Params category
+   * @return object drinks
+   */
+  async filterCategoryByName(category) {
+    const response = await this.api.get(`filter.php?c=${category}`);
+    return response;
+  }
+
+  /**
+   * @author Caio César Lacerda
+   * @Params id
+   * @return object drinks
+   */
+  async getDrinkDetailById(id) {
+    const response = await this.api.get(`lookup.php?i=${id}`);
+    return response;
+  }
 }
 
 export default new SearchServices();
