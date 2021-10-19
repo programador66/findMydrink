@@ -2,7 +2,7 @@
 
 # FindMyDrink
 
-O Projeto foi desenvolvido para consumo de api do site TheCockTail.
+O Projeto foi desenvolvido para consumo de api do site TheCockTail que é um serviços de buscas com api free para desenvolvimento.
 
 # ✋🏻 Pré-requisitos
 
