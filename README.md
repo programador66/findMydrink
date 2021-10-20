@@ -4,6 +4,8 @@
 
 O Projeto foi desenvolvido para consumo de api do site TheCockTail que é um serviços de buscas com api free para desenvolvimento.
 
+Link em Produção: https://hungry-aryabhata-c01b3a.netlify.app/
+
 # ✋🏻 Pré-requisitos
 
 - [Node.js](https://nodejs.org/en/)
